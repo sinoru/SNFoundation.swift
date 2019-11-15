@@ -5,12 +5,26 @@ on: [push]
 jobs:
   build:
 
-    runs-on: macOS-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, macOS-latest]
+        swift: [5.0, 5.1]
+        exclude:
+          - os: macos-latest
+            swift: 5.0
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build
-      run: swift build -v
     - name: Run tests
+      if: contains(runner.os, 'macOS')
       run: swift test -v
-
+    - name: Run tests
+      if: contains(runner.os, 'ubuntu-16.04')
+      uses: docker://swift:${{ matrix.swift }}-xenial
+      run: swift test -v
+    - name: Run tests
+      if: contains(runner.os, 'ubuntu-18.04')
+      uses: docker://swift:${{ matrix.swift }}-bionic
+      run: swift test -v
