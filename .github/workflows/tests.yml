@@ -18,11 +18,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run tests in native
-      if: contains(runner.os, 'macOS')
+      if: contains(matrix.os, 'macOS')
       run: swift test -v
     - name: Run tests in xenial container
-      if: runner.os == 'ubuntu-16.04'
+      if: matrix.os == 'ubuntu-16.04'
       run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -it --rm swift:${{ matrix.swift }}-xenial swift test -v
     - name: Run tests in bionic container
-      if: runner.os == 'ubuntu-18.04'
+      if: matrix.os == 'ubuntu-18.04'
       run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -it --rm swift:${{ matrix.swift }}-bionic swift test -v
