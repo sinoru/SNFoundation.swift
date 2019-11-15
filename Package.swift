@@ -24,5 +24,13 @@ let package = Package(
         .testTarget(
             name: "SNFoundationTests",
             dependencies: ["SNFoundation"]),
+        .target(
+            name: "Expressional"),
+        .target(
+            name: "Unknownable",
+            dependencies: ["Expressional"]),
+        .testTarget(
+            name: "UnknownableTests",
+            dependencies: ["Unknownable"])
     ]
 )

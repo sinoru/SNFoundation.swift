@@ -6,7 +6,7 @@ final class SNFoundationTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(SNFoundation().text, "Hello, World!")
+        // XCTAssertEqual(SNFoundation().text, "Hello, World!")
     }
 
     static var allTests = [
