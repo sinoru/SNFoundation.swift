@@ -9,15 +9,21 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-16.04, ubuntu-18.04]
-        swift: ["5.0", "5.1"]
-        include:
-          - os: macos-latest
+        os: [ubuntu-16.04, ubuntu-18.04, macOS-latest]
+        swift: ["5.0", "5.1", "local"]
+        exclude:
+          - os: ubuntu-16.04
             swift: "local"
+          - os: ubuntu-18.04
+            swift: "local"
+          - os: macos-latest
+            swift: "5.0"
+          - os: macos-latest
+            swift: "5.1"
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run tests in local
+    - name: Run tests in native
       if: contains(matrix.os, 'macOS')
       run: swift test -v
     - name: Run tests in xenial container
