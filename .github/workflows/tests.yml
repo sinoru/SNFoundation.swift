@@ -22,11 +22,7 @@ jobs:
       run: swift test -v
     - name: Run tests
       if: contains(runner.os, 'ubuntu-16.04')
-      uses: docker://swift:${{ matrix.swift }}-xenial
-      with:
-        args: swift test -v
+      run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -it --rm swift:${{ matrix.swift }}-xenial swift test -v
     - name: Run tests
       if: contains(runner.os, 'ubuntu-18.04')
-      uses: docker://swift:${{ matrix.swift }}-bionic
-      with:
-        args: swift test -v
+      run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -it --rm swift:${{ matrix.swift }}-bionic swift test -v
