@@ -23,8 +23,10 @@ jobs:
     - name: Run tests
       if: contains(runner.os, 'ubuntu-16.04')
       uses: docker://swift:${{ matrix.swift }}-xenial
-      run: swift test -v
+      with:
+        args: swift test -v
     - name: Run tests
       if: contains(runner.os, 'ubuntu-18.04')
       uses: docker://swift:${{ matrix.swift }}-bionic
-      run: swift test -v
+      with:
+        args: swift test -v
