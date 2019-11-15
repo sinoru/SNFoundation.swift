@@ -1,6 +1,6 @@
 //
-//  SNFoundation.swift
-//
+//  WeakTests.swift
+//  
 //
 //  Created by Jaehong Kang on 2019/11/15.
 //  Copyright © 2019 Sinoru. All rights reserved.
@@ -17,6 +17,28 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-@_exported import Expressional
-@_exported import Unknownable
-@_exported import Weak
+import Foundation
+
+import XCTest
+@testable import Weak
+
+final class WeakTests: XCTestCase {
+    func testWeak() {
+        class A {
+
+        }
+
+        var a: A? = A()
+        XCTAssertNotNil(a)
+
+        let wrappedA = Weak(a)
+        XCTAssertNotNil(wrappedA.object)
+
+        a = nil
+        XCTAssertNil(wrappedA.object)
+    }
+
+    static var allTests = [
+        ("testWeak", testWeak),
+    ]
+}
