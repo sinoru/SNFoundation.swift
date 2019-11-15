@@ -1,3 +1,3 @@
 # SNFoundation
 
-A description of this package.
+Addtional bases to Foundation Layer.
