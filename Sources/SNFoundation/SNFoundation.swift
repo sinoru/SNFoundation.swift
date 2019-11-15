@@ -1,3 +1,3 @@
-struct Foundation {
+struct SNFoundation {
     var text = "Hello, World!"
 }

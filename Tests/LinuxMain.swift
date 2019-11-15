@@ -1,7 +1,7 @@
 import XCTest
 
-import FoundationTests
+import SNFoundationTests
 
 var tests = [XCTestCaseEntry]()
-tests += FoundationTests.allTests()
+tests += SNFoundationTests.allTests()
 XCTMain(tests)
