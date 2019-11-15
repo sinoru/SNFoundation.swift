@@ -2,14 +2,29 @@ import XCTest
 @testable import SNFoundation
 
 final class SNFoundationTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        // XCTAssertEqual(SNFoundation().text, "Hello, World!")
+    func testExpressional() {
+        enum A: Expressional {
+            case a
+        }
+
+        XCTAssertNotNil(A.self)
+    }
+
+    func testUnknownable() {
+        enum A: String {
+            case a
+        }
+
+        XCTAssertNotNil(Unknownable<A>.self)
+    }
+
+    func testWeak() {
+        XCTAssertNotNil(Weak<AnyObject>.self)
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExpressional", testExpressional),
+        ("testUnknownable", testUnknownable),
+        ("testWeak", testWeak),
     ]
 }

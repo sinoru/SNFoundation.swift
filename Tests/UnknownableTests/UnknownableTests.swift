@@ -21,7 +21,7 @@ import Foundation
 
 
 import XCTest
-@testable import SNFoundation
+@testable import Unknownable
 
 final class UnknownableTests: XCTestCase {
     func testRawRepresentable() {
