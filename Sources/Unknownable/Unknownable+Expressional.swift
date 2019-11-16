@@ -1,5 +1,5 @@
 //
-//  Unknownable+Expressional.swift
+//  Unknownable+CustomExpressional.swift
 //  
 //
 //  Created by Jaehong Kang on 2019/11/15.
@@ -17,9 +17,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-import Expressional
+import CustomExpressional
 
-extension Unknownable: Expressional where Value.RawValue: Equatable {
+extension Unknownable: CustomExpressional where Value.RawValue: Equatable {
     public static func ~= (lhs: Unknownable<Value>, rhs: Unknownable<Value>) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }

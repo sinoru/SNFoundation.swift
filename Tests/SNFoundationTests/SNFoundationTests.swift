@@ -3,7 +3,7 @@ import XCTest
 
 final class SNFoundationTests: XCTestCase {
     func testExpressional() {
-        enum A: Expressional {
+        enum A: CustomExpressional {
             case a
         }
 

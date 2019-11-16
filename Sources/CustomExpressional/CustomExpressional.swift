@@ -1,5 +1,5 @@
 //
-//  Expressional.swift
+//  CustomExpressional.swift
 //  
 //
 //  Created by Jaehong Kang on 2019/11/15.
@@ -19,6 +19,6 @@
 
 import Foundation
 
-public protocol Expressional {
+public protocol CustomExpressional {
     static func ~= (lhs: Self, rhs: Self) -> Bool
 }
