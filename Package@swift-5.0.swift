@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -28,24 +28,20 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SNFoundation",
-            dependencies: ["CustomExpressional", "Unknownable", "Weak"],
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            dependencies: ["CustomExpressional", "Unknownable", "Weak"]),
         .testTarget(
             name: "SNFoundationTests",
             dependencies: ["SNFoundation"]),
         .target(
-            name: "CustomExpressional",
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            name: "CustomExpressional"),
         .target(
             name: "Unknownable",
-            dependencies: ["CustomExpressional"],
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            dependencies: ["CustomExpressional"]),
         .testTarget(
             name: "UnknownableTests",
             dependencies: ["Unknownable"]),
         .target(
-            name: "Weak",
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            name: "Weak"),
         .testTarget(
             name: "WeakTests",
             dependencies: ["Weak"]),
