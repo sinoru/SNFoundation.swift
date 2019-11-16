@@ -19,8 +19,15 @@
 
 import Foundation
 
+#if swift(>=5.1)
 @frozen
 public enum Unknownable<Value: RawRepresentable> {
     case unknown(Value.RawValue)
     case known(Value)
 }
+#else
+public enum Unknownable<Value: RawRepresentable> {
+    case unknown(Value.RawValue)
+    case known(Value)
+}
+#endif
