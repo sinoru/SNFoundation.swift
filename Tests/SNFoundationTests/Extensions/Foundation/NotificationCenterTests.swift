@@ -24,7 +24,7 @@ import XCTest
 
 final class NotificationCenterTests: XCTestCase {
     func testNotified() {
-        class A {
+        class A: NSObject {
 
         }
         let a = A()
@@ -43,7 +43,7 @@ final class NotificationCenterTests: XCTestCase {
     }
 
     func testNotNotifiedAfterObservationDealloc() {
-        class A {
+        class A: NSObject {
 
         }
         let a = A()
