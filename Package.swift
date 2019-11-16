@@ -10,6 +10,14 @@ let package = Package(
         .library(
             name: "SNFoundation",
             targets: ["SNFoundation"]),
+        .library(
+            name: "SNFoundationDynamic",
+            type: .dynamic,
+            targets: ["SNFoundation"]),
+        .library(
+            name: "SNFoundationStatic",
+            type: .static,
+            targets: ["SNFoundation"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -20,20 +28,24 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SNFoundation",
-            dependencies: ["Expressional", "Unknownable", "Weak"]),
+            dependencies: ["Expressional", "Unknownable", "Weak"],
+            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
         .testTarget(
             name: "SNFoundationTests",
             dependencies: ["SNFoundation"]),
         .target(
-            name: "Expressional"),
+            name: "Expressional",
+            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
         .target(
             name: "Unknownable",
-            dependencies: ["Expressional"]),
+            dependencies: ["Expressional"],
+            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
         .testTarget(
             name: "UnknownableTests",
             dependencies: ["Unknownable"]),
         .target(
-            name: "Weak"),
+            name: "Weak",
+            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
         .testTarget(
             name: "WeakTests",
             dependencies: ["Weak"]),
