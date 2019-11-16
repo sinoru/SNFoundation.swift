@@ -19,6 +19,7 @@
 
 import Foundation
 
+@frozen
 public enum Unknownable<Value: RawRepresentable> {
     case unknown(Value.RawValue)
     case known(Value)
