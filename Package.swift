@@ -28,7 +28,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SNFoundation",
-            dependencies: ["CustomExpressional", "Unknownable", "Weak"],
+            dependencies: ["CustomExpressional", "Unknownable", "Weak", "Reusable"],
             swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
         .testTarget(
             name: "SNFoundationTests",
@@ -49,5 +49,8 @@ let package = Package(
         .testTarget(
             name: "WeakTests",
             dependencies: ["Weak"]),
+        .target(
+            name: "Reusable",
+            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ])
     ]
 )
