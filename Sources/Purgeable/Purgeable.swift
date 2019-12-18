@@ -18,7 +18,7 @@ open class Purgeable<T: Any> {
         /// When system memory pressure condition changed to critical.
         case critical
 
-        private var dispatchSourceMemoryPressureEventMask: DispatchSource.MemoryPressureEvent {
+        fileprivate var dispatchSourceMemoryPressureEventMask: DispatchSource.MemoryPressureEvent {
             switch self {
             case .warning:
                 return [.warning, .critical]
@@ -29,12 +29,41 @@ open class Purgeable<T: Any> {
     }
 
     /// Memory pressure to purge.
-    public let memoryPressure: MemoryPressure
+    open var memoryPressure: MemoryPressure {
+        didSet {
+            self.memoryPressureSource = self.newMemoryPressureSource()
+        }
+    }
 
-    private lazy var memoryPressureSource = DispatchSource.makeMemoryPressureSource(
-        eventMask: .warning,
-        queue: self.queue
-    )
+    private var memoryPressureSource: DispatchSourceMemoryPressure? {
+        willSet {
+            guard self.memoryPressureSource !== newValue else {
+                return
+            }
+
+            self.memoryPressureSource?.cancel()
+        }
+        didSet {
+            guard self.memoryPressureSource !== oldValue else {
+                return
+            }
+
+            self.memoryPressureSource?.resume()
+        }
+    }
+
+    private func newMemoryPressureSource() -> DispatchSourceMemoryPressure {
+        let memoryPressureSource = DispatchSource.makeMemoryPressureSource(
+            eventMask: self.memoryPressure.dispatchSourceMemoryPressureEventMask,
+            queue: self.queue
+        )
+
+        memoryPressureSource.setEventHandler {
+            self.purge()
+        }
+
+        return memoryPressureSource
+    }
     #endif
 
     private lazy var queue = DispatchQueue(label: String(reflecting: self), qos: .default)
@@ -42,6 +71,7 @@ open class Purgeable<T: Any> {
     private let initializer: () -> T
 
     private var _object: T?
+
     /// A object that can be purged.
     open var object: T {
         return self.queue.sync {
@@ -57,6 +87,12 @@ open class Purgeable<T: Any> {
         }
     }
 
+    /// Whether object is loaded.
+    open var isObjectLoaded: Bool {
+        return self._object != nil
+    }
+
+    /// Make object purged.
     open func purge() {
         self._object = nil
     }
@@ -70,16 +106,12 @@ open class Purgeable<T: Any> {
         self.initializer = initializer
         self.memoryPressure = memoryPressure
 
-        self.memoryPressureSource.setEventHandler {
-            self.purge()
-        }
-        self.memoryPressureSource.resume()
+        self.memoryPressureSource = self.newMemoryPressureSource()
     }
     #else
     /// Creates a new instance for initializer object.
     ///
     /// - Parameter initializer: A initializer for re-create object after purged.
-    /// - Parameter memoryPressure: Memory pressure level to purge.
     public init(_ initializer: @autoclosure @escaping () -> T) {
         self.initializer = initializer
     }
