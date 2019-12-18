@@ -1,5 +1,5 @@
 //
-//  AnyReusable.swift
+//  Purgeable.swift
 //  
 //
 //  Created by Jaehong Kang on 2019/11/27.
@@ -7,9 +7,14 @@
 
 import Foundation
 
-open class Reusable<T: Any> {
+/// A type that contains object can be purged and recreate
+/// conditionally by memory pressure.
+open class Purgeable<T: Any> {
+    /// Memory pressure levels
     public enum MemoryPressure {
+        /// When system memory pressure condition changed to warning or critical.
         case warning
+        /// When system memory pressure condition changed to critical.
         case critical
 
         private var dispatchSourceMemoryPressureEventMask: DispatchSource.MemoryPressureEvent {
@@ -22,6 +27,7 @@ open class Reusable<T: Any> {
         }
     }
 
+    /// Memory pressure to purge.
     public let memoryPressure: MemoryPressure
 
     private lazy var queue = DispatchQueue(label: String(reflecting: self), qos: .default)
@@ -33,6 +39,7 @@ open class Reusable<T: Any> {
     private let initializer: () -> T
 
     private var _object: T?
+    /// A object that can be purged.
     open var object: T {
         return self.queue.sync {
             if let object = self._object {
@@ -47,6 +54,10 @@ open class Reusable<T: Any> {
         }
     }
 
+    /// Creates a new instance for initializer object.
+    ///
+    /// - Parameter initializer: A initializer for re-create object after purged.
+    /// - Parameter memoryPressure: Memory pressure level to purge.
     public init(_ initializer: @autoclosure @escaping () -> T, memoryPressure: MemoryPressure = .warning) {
         self.initializer = initializer
         self.memoryPressure = memoryPressure

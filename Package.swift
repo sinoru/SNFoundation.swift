@@ -28,29 +28,24 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SNFoundation",
-            dependencies: ["CustomExpressional", "Unknownable", "Weak", "Reusable"],
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            dependencies: ["CustomExpressional", "Unknownable", "Weak", "Purgeable"]),
         .testTarget(
             name: "SNFoundationTests",
             dependencies: ["SNFoundation"]),
         .target(
-            name: "CustomExpressional",
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            name: "CustomExpressional"),
         .target(
             name: "Unknownable",
-            dependencies: ["CustomExpressional"],
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            dependencies: ["CustomExpressional"]),
         .testTarget(
             name: "UnknownableTests",
             dependencies: ["Unknownable"]),
         .target(
-            name: "Weak",
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ]),
+            name: "Weak"),
         .testTarget(
             name: "WeakTests",
             dependencies: ["Weak"]),
         .target(
-            name: "Reusable",
-            swiftSettings: [ .unsafeFlags(["-enable-library-evolution"]) ])
+            name: "Purgeable")
     ]
 )
