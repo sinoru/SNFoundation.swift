@@ -10,6 +10,7 @@ import Foundation
 /// A type that contains object can be purged and recreate
 /// conditionally by memory pressure.
 open class Purgeable<T: Any> {
+    #if canImport(Darwin) // FIXME: Should be replaced with Mach API availalble check.
     /// Memory pressure levels
     public enum MemoryPressure {
         /// When system memory pressure condition changed to warning or critical.
@@ -30,11 +31,13 @@ open class Purgeable<T: Any> {
     /// Memory pressure to purge.
     public let memoryPressure: MemoryPressure
 
-    private lazy var queue = DispatchQueue(label: String(reflecting: self), qos: .default)
     private lazy var memoryPressureSource = DispatchSource.makeMemoryPressureSource(
         eventMask: .warning,
         queue: self.queue
     )
+    #endif
+
+    private lazy var queue = DispatchQueue(label: String(reflecting: self), qos: .default)
 
     private let initializer: () -> T
 
@@ -54,6 +57,11 @@ open class Purgeable<T: Any> {
         }
     }
 
+    open func purge() {
+        self._object = nil
+    }
+
+    #if canImport(Darwin) // FIXME: Should be replaced with Mach API availalble check.
     /// Creates a new instance for initializer object.
     ///
     /// - Parameter initializer: A initializer for re-create object after purged.
@@ -63,8 +71,17 @@ open class Purgeable<T: Any> {
         self.memoryPressure = memoryPressure
 
         self.memoryPressureSource.setEventHandler {
-            self._object = nil
+            self.purge()
         }
         self.memoryPressureSource.resume()
     }
+    #else
+    /// Creates a new instance for initializer object.
+    ///
+    /// - Parameter initializer: A initializer for re-create object after purged.
+    /// - Parameter memoryPressure: Memory pressure level to purge.
+    public init(_ initializer: @autoclosure @escaping () -> T) {
+        self.initializer = initializer
+    }
+    #endif
 }
