@@ -22,7 +22,7 @@ open class Reusable<T: Any> {
         }
     }
 
-    let memoryPressure: MemoryPressure
+    public let memoryPressure: MemoryPressure
 
     private lazy var queue = DispatchQueue(label: String(reflecting: self), qos: .default)
     private lazy var memoryPressureSource = DispatchSource.makeMemoryPressureSource(
@@ -33,7 +33,7 @@ open class Reusable<T: Any> {
     private let initializer: () -> T
 
     private var _object: T?
-    var object: T {
+    open var object: T {
         return self.queue.sync {
             if let object = self._object {
                 return object
@@ -47,7 +47,7 @@ open class Reusable<T: Any> {
         }
     }
 
-    init(_ initializer: @autoclosure @escaping () -> T, memoryPressure: MemoryPressure = .warning) {
+    public init(_ initializer: @autoclosure @escaping () -> T, memoryPressure: MemoryPressure = .warning) {
         self.initializer = initializer
         self.memoryPressure = memoryPressure
 
