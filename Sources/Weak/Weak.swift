@@ -7,6 +7,7 @@
 
 import Foundation
 
+@propertyWrapper
 @dynamicMemberLookup
 public struct Weak<Value: AnyObject> {
     public weak var value: Value?
