@@ -20,7 +20,7 @@ public class Lazy<WrappedValue: Any> {
 
     open private(set) var isLoaded: Bool = false
 
-    public var valueIfLoaded: WrappedValue? {
+    public var wrappedValueIfLoaded: WrappedValue? {
         guard isLoaded else {
             return nil
         }
@@ -37,6 +37,10 @@ public class Lazy<WrappedValue: Any> {
             isLoaded = true
             value = newValue
         }
+    }
+
+    public var projectedValue: Lazy<WrappedValue> {
+        return self
     }
 
     public init(wrappedValue value: @autoclosure @escaping () -> WrappedValue) {

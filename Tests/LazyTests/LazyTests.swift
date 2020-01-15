@@ -12,17 +12,21 @@ import XCTest
 
 final class LazyTests: XCTestCase {
 
-    @Lazy var testLazy_test = "test"
     func testLazy() {
-        XCTAssertEqual(_testLazy_test.isLoaded, false)
-        XCTAssertNil(_testLazy_test.valueIfLoaded)
-        XCTAssertEqual(_testLazy_test.isLoaded, false)
+        class Test {
+            @Lazy var test = "test"
+        }
 
-        _ = testLazy_test
+        let test = Test()
+        XCTAssertEqual(test.$test.isLoaded, false)
+        XCTAssertNil(test.$test.wrappedValueIfLoaded)
+        XCTAssertEqual(test.$test.isLoaded, false)
 
-        XCTAssertEqual(_testLazy_test.isLoaded, true)
-        XCTAssertNotNil(_testLazy_test.valueIfLoaded)
-        XCTAssertEqual(_testLazy_test.isLoaded, true)
+        _ = test.test
+
+        XCTAssertEqual(test.$test.isLoaded, true)
+        XCTAssertNotNil(test.$test.wrappedValueIfLoaded)
+        XCTAssertEqual(test.$test.isLoaded, true)
     }
 
     static var allTests = [
