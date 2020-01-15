@@ -7,10 +7,34 @@
 
 import Foundation
 
-public struct Weak<Wrapped: AnyObject> {
-    public weak var object: Wrapped?
+@propertyWrapper
+@dynamicMemberLookup
+public struct Weak<Value: AnyObject> {
+    public weak var value: Value?
 
-    public init(_ object: Wrapped?) {
-        self.object = object
+    public var wrappedValue: Value? {
+        get {
+            return value
+        }
+        set {
+            value = newValue
+        }
+    }
+
+    public init(wrappedValue value: Value?) {
+        self.value = value
+    }
+
+    subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<Value, T>) -> T? {
+        get {
+            wrappedValue?[keyPath: keyPath]
+        }
+        set {
+            guard let newValue = newValue else {
+                fatalError("newValue should not be nil")
+            }
+
+            wrappedValue?[keyPath: keyPath] = newValue
+        }
     }
 }

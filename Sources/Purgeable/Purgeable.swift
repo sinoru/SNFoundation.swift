@@ -9,7 +9,9 @@ import Foundation
 
 /// A type that contains object can be purged and recreate
 /// conditionally by memory pressure.
-open class Purgeable<T: Any> {
+@propertyWrapper
+@dynamicMemberLookup
+open class Purgeable<WrappedValue: Any> {
     #if canImport(Darwin) // FIXME: Should be replaced with Mach API availalble check.
     /// Memory pressure levels
     public enum MemoryPressure {
@@ -68,19 +70,19 @@ open class Purgeable<T: Any> {
 
     private lazy var queue = DispatchQueue(label: String(reflecting: self), qos: .default)
 
-    private let initializer: () -> T
+    private let initializer: () -> WrappedValue
 
-    private var _object: T?
+    private var value: WrappedValue?
 
     /// A object that can be purged.
-    open var object: T {
+    open var wrappedValue: WrappedValue {
         return self.queue.sync {
-            if let object = self._object {
+            if let object = self.value {
                 return object
             } else {
                 let object = initializer()
 
-                self._object = object
+                self.value = object
 
                 return object
             }
@@ -88,13 +90,13 @@ open class Purgeable<T: Any> {
     }
 
     /// Whether object is loaded.
-    open var isObjectLoaded: Bool {
-        return self._object != nil
+    open var isValueLoaded: Bool {
+        return self.value != nil
     }
 
     /// Make object purged.
     open func purge() {
-        self._object = nil
+        self.value = nil
     }
 
     #if canImport(Darwin) // FIXME: Should be replaced with Mach API availalble check.
@@ -102,7 +104,7 @@ open class Purgeable<T: Any> {
     ///
     /// - Parameter initializer: A initializer for re-create object after purged.
     /// - Parameter memoryPressure: Memory pressure level to purge.
-    public init(_ initializer: @autoclosure @escaping () -> T, memoryPressure: MemoryPressure = .warning) {
+    public init(wrappedValue initializer: @autoclosure @escaping () -> WrappedValue, memoryPressure: MemoryPressure = .warning) {
         self.initializer = initializer
         self.memoryPressure = memoryPressure
 
@@ -112,8 +114,17 @@ open class Purgeable<T: Any> {
     /// Creates a new instance for initializer object.
     ///
     /// - Parameter initializer: A initializer for re-create object after purged.
-    public init(_ initializer: @autoclosure @escaping () -> T) {
+    public init(wrappedValue initializer: @autoclosure @escaping () -> WrappedValue) {
         self.initializer = initializer
     }
     #endif
+
+    subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<WrappedValue, T>) -> T {
+        get {
+            wrappedValue[keyPath: keyPath]
+        }
+        set {
+            wrappedValue[keyPath: keyPath] = newValue
+        }
+    }
 }

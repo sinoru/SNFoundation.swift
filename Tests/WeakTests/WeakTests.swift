@@ -25,17 +25,18 @@ import XCTest
 final class WeakTests: XCTestCase {
     func testWeak() {
         class A {
-
+            var test = "Test"
         }
 
         var a: A? = A()
         XCTAssertNotNil(a)
 
-        let wrappedA = Weak(a)
-        XCTAssertNotNil(wrappedA.object)
+        let wrappedA = Weak(wrappedValue: a)
+        XCTAssertNotNil(wrappedA.value)
+        XCTAssertNotNil(wrappedA.test)
 
         a = nil
-        XCTAssertNil(wrappedA.object)
+        XCTAssertNil(wrappedA.value)
     }
 
     static var allTests = [
