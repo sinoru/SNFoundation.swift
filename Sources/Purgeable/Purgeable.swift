@@ -11,7 +11,7 @@ import Foundation
 /// conditionally by memory pressure.
 @propertyWrapper
 @dynamicMemberLookup
-open class Purgeable<WrappedValue: Any> {
+public class Purgeable<WrappedValue: Any> {
     #if canImport(Darwin) // FIXME: Should be replaced with Mach API availalble check.
     /// Memory pressure levels
     public enum MemoryPressure {
