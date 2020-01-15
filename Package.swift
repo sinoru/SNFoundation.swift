@@ -28,7 +28,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SNFoundation",
-            dependencies: ["CustomExpressional", "Unknownable", "Weak", "Purgeable"]),
+            dependencies: ["CustomExpressional", "Unknownable", "Weak", "Purgeable", "Lazy"]),
         .testTarget(
             name: "SNFoundationTests",
             dependencies: ["SNFoundation"]),
@@ -46,6 +46,11 @@ let package = Package(
             name: "WeakTests",
             dependencies: ["Weak"]),
         .target(
-            name: "Purgeable")
+            name: "Purgeable"),
+        .target(
+            name: "Lazy"),
+        .testTarget(
+            name: "LazyTests",
+            dependencies: ["Lazy"]),
     ]
 )
