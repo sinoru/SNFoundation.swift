@@ -28,9 +28,19 @@ final class SNFoundationTests: XCTestCase {
     }
     #endif
 
-    static var allTests = [
-        ("testExpressional", testExpressional),
-        ("testUnknownable", testUnknownable),
-        ("testWeak", testWeak),
-    ]
+    static var allTests: [(String, (SNFoundationTests) -> () -> ())] = {
+        var allTests = [
+            ("testExpressional", testExpressional),
+            ("testUnknownable", testUnknownable),
+        ]
+
+        #if swift(>=5.1)
+        allTests += [
+            ("testWeak", testWeak),
+            ("testPurgable", testPurgable),
+        ]
+        #endif
+
+        return allTests
+    }()
 }
