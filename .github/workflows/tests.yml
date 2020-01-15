@@ -3,32 +3,29 @@ name: Tests
 on: [push]
 
 jobs:
-  build:
+  test_linux:
+    runs-on: "ubuntu-18.04"
+    strategy:
+      matrix:
+        os: ["xenial", "bionic"]
+        swift: ["5.0.3", "5.1.3"]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run tests
+        run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -i --rm swift:${{ matrix.swift }}-${{ matrix.os }} swift test -v
 
+  test_macos:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-16.04, ubuntu-18.04, macOS-latest]
-        swift: ["5.0", "5.1", "local"]
-        exclude:
-          - os: ubuntu-16.04
-            swift: "local"
-          - os: ubuntu-18.04
-            swift: "local"
-          - os: macos-latest
-            swift: "5.0"
-          - os: macos-latest
-            swift: "5.1"
+        os: [macOS-latest]
+        xcode-version: ["11.3"]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Run tests in native
-      if: contains(matrix.os, 'macOS')
-      run: swift test -v
-    - name: Run tests in xenial container
-      if: matrix.os == 'ubuntu-16.04'
-      run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -i --rm swift:${{ matrix.swift }}-xenial swift test -v
-    - name: Run tests in bionic container
-      if: matrix.os == 'ubuntu-18.04'
-      run: docker run -v ${{ github.workspace }}:/mnt -w /mnt --cap-add sys_ptrace -i --rm swift:${{ matrix.swift }}-bionic swift test -v
+      - uses: actions/checkout@v1
+      - uses: sinoru/actions-setup-xcode@v1.1
+        with:
+          xcode-version: ${{ matrix.xcode-version }}
+      - name: Run tests
+        run: swift test -v
