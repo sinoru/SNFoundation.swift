@@ -19,4 +19,7 @@
 
 @_exported import CustomExpressional
 @_exported import Unknownable
+#if swift(>=5.1)
 @_exported import Weak
+@_exported import Purgeable
+#endif
