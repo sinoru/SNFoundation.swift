@@ -8,7 +8,7 @@
 import Foundation
 
 import XCTest
-@testable import Lazy
+@testable import SNFoundation
 
 final class LazyTests: XCTestCase {
 

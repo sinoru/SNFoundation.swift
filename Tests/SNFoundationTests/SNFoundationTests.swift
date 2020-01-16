@@ -18,7 +18,6 @@ final class SNFoundationTests: XCTestCase {
         XCTAssertNotNil(Unknownable<A>.self)
     }
 
-    #if swift(>=5.1)
     func testWeak() {
         XCTAssertNotNil(Weak<AnyObject>.self)
     }
@@ -26,7 +25,6 @@ final class SNFoundationTests: XCTestCase {
     func testPurgable() {
         XCTAssertNotNil(Purgeable<Any>.self)
     }
-    #endif
 
     static var allTests: [(String, (SNFoundationTests) -> () -> ())] = {
         var allTests = [
@@ -34,12 +32,10 @@ final class SNFoundationTests: XCTestCase {
             ("testUnknownable", testUnknownable),
         ]
 
-        #if swift(>=5.1)
         allTests += [
             ("testWeak", testWeak),
             ("testPurgable", testPurgable),
         ]
-        #endif
 
         return allTests
     }()

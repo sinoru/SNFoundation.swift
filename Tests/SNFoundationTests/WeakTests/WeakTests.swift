@@ -1,5 +1,5 @@
 //
-//  UnknownableTests.swift
+//  WeakTests.swift
 //  
 //
 //  Created by Jaehong Kang on 2019/11/15.
@@ -19,34 +19,27 @@
 
 import Foundation
 
-
 import XCTest
-@testable import Unknownable
+@testable import SNFoundation
 
-final class UnknownableTests: XCTestCase {
-    func testRawRepresentable() {
-        enum A: String {
-            case a, b, c, d
+final class WeakTests: XCTestCase {
+    func testWeak() {
+        class A {
+            var test = "Test"
         }
 
-        let knownA = Unknownable<A>.known(A.a)
-        let unknownA = Unknownable<A>.unknown("a")
+        var a: A? = A()
+        XCTAssertNotNil(a)
 
-        XCTAssertTrue(knownA.rawValue == unknownA.rawValue)
-    }
+        let wrappedA = Weak(wrappedValue: a)
+        XCTAssertNotNil(wrappedA.value)
+        XCTAssertNotNil(wrappedA.test)
 
-    func testExpressional() {
-        enum A: String {
-            case a, b, c, d
-        }
-
-        let knownB = Unknownable<A>.known(A.b)
-        let unknownB = Unknownable<A>.unknown("b")
-
-        XCTAssertTrue(knownB ~= unknownB)
+        a = nil
+        XCTAssertNil(wrappedA.value)
     }
 
     static var allTests = [
-        ("testExpressional", testExpressional),
+        ("testWeak", testWeak),
     ]
 }

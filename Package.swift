@@ -28,29 +28,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SNFoundation",
-            dependencies: ["CustomExpressional", "Unknownable", "Weak", "Purgeable", "Lazy"]),
+            dependencies: []),
         .testTarget(
             name: "SNFoundationTests",
             dependencies: ["SNFoundation"]),
-        .target(
-            name: "CustomExpressional"),
-        .target(
-            name: "Unknownable",
-            dependencies: ["CustomExpressional"]),
-        .testTarget(
-            name: "UnknownableTests",
-            dependencies: ["Unknownable"]),
-        .target(
-            name: "Weak"),
-        .testTarget(
-            name: "WeakTests",
-            dependencies: ["Weak"]),
-        .target(
-            name: "Purgeable"),
-        .target(
-            name: "Lazy"),
-        .testTarget(
-            name: "LazyTests",
-            dependencies: ["Lazy"]),
     ]
 )

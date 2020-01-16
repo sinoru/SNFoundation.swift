@@ -17,8 +17,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-import CustomExpressional
-
 extension Unknownable: CustomExpressional where Value.RawValue: Equatable {
     public static func ~= (lhs: Unknownable<Value>, rhs: Unknownable<Value>) -> Bool {
         return lhs.rawValue == rhs.rawValue
