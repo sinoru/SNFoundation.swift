@@ -9,7 +9,7 @@ import Foundation
 
 @propertyWrapper
 @dynamicMemberLookup
-public struct Weak<Value: AnyObject> {
+public class Weak<Value: AnyObject> {
     public weak var value: Value?
 
     public var wrappedValue: Value? {
@@ -23,6 +23,10 @@ public struct Weak<Value: AnyObject> {
 
     public init(wrappedValue value: Value?) {
         self.value = value
+    }
+
+    public convenience init(_ value: Value?) {
+        self.init(wrappedValue: value)
     }
 
     subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<Value, T>) -> T? {
