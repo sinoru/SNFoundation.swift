@@ -17,6 +17,7 @@ open class AsynchronousOperation<Success, Failure: Error>: Foundation.Operation 
             switch state {
             case .cancelled:
                 willChangeValue(for: \.isCancelled)
+                willChangeValue(for: \.isFinished)
             case .executing:
                 willChangeValue(for: \.isExecuting)
             case .ready:
@@ -30,6 +31,7 @@ open class AsynchronousOperation<Success, Failure: Error>: Foundation.Operation 
             switch newValue {
             case .cancelled:
                 willChangeValue(for: \.isCancelled)
+                willChangeValue(for: \.isFinished)
             case .executing:
                 willChangeValue(for: \.isExecuting)
             case .ready:
@@ -44,6 +46,7 @@ open class AsynchronousOperation<Success, Failure: Error>: Foundation.Operation 
             switch oldValue {
             case .cancelled:
                 didChangeValue(for: \.isCancelled)
+                didChangeValue(for: \.isFinished)
             case .executing:
                 didChangeValue(for: \.isExecuting)
             case .ready:
@@ -57,6 +60,7 @@ open class AsynchronousOperation<Success, Failure: Error>: Foundation.Operation 
             switch state {
             case .cancelled:
                 didChangeValue(for: \.isCancelled)
+                didChangeValue(for: \.isFinished)
             case .executing:
                 didChangeValue(for: \.isExecuting)
             case .ready:
@@ -94,9 +98,10 @@ open class AsynchronousOperation<Success, Failure: Error>: Foundation.Operation 
     }
 
     open override var isFinished: Bool {
-        if case .finished = state {
+        switch state {
+        case .finished, .cancelled:
             return true
-        } else {
+        default:
             return false
         }
     }
