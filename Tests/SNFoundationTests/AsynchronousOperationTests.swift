@@ -16,12 +16,20 @@ final class AsynchronousOperationTests: XCTestCase {
         XCTAssertEqual(operation.isCancelled, false)
         XCTAssertEqual(operation.isFinished, false)
 
-        wait(for: [
-            XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
-        ], timeout: 1.0)
+        let expectations: [XCTestExpectation] = {
+            if #available(OSXApplicationExtension 10.0, iOSApplicationExtension 2.0, watchOSApplicationExtension 2.0, tvOSApplicationExtension 9.0, *) {
+                return [
+                           XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
+                       ]
+            } else {
+                return []
+            }
+        }()
+
+        wait(for: expectations, timeout: 1.0)
     }
 
     func testOperationReady() {
@@ -31,12 +39,18 @@ final class AsynchronousOperationTests: XCTestCase {
         XCTAssertEqual(operation.isCancelled, false)
         XCTAssertEqual(operation.isFinished, false)
 
-        let expectations = [
-            XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: true),
-            XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
-        ]
+        let expectations: [XCTestExpectation] = {
+            if #available(OSXApplicationExtension 10.0, iOSApplicationExtension 2.0, watchOSApplicationExtension 2.0, tvOSApplicationExtension 9.0, *) {
+                return [
+                           XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: true),
+                           XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
+                       ]
+            } else {
+                return []
+            }
+        }()
 
         operation.state = .ready
         XCTAssertEqual(operation.isReady, true)
@@ -54,12 +68,18 @@ final class AsynchronousOperationTests: XCTestCase {
         XCTAssertEqual(operation.isCancelled, false)
         XCTAssertEqual(operation.isFinished, false)
 
-        let expectations = [
-            XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: true),
-            XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
-        ]
+        let expectations: [XCTestExpectation] = {
+            if #available(OSXApplicationExtension 10.0, iOSApplicationExtension 2.0, watchOSApplicationExtension 2.0, tvOSApplicationExtension 9.0, *) {
+                return [
+                           XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: true),
+                           XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
+                       ]
+            } else {
+                return []
+            }
+        }()
 
         operation.state = .executing
         XCTAssertEqual(operation.isReady, false)
@@ -77,12 +97,18 @@ final class AsynchronousOperationTests: XCTestCase {
         XCTAssertEqual(operation.isCancelled, false)
         XCTAssertEqual(operation.isFinished, false)
 
-        let expectations = [
-            XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: true)
-        ]
+        let expectations: [XCTestExpectation] = {
+            if #available(OSXApplicationExtension 10.0, iOSApplicationExtension 2.0, watchOSApplicationExtension 2.0, tvOSApplicationExtension 9.0, *) {
+                return [
+                           XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: true)
+                       ]
+            } else {
+                return []
+            }
+        }()
 
         operation.state = .finished(.success(()))
         XCTAssertEqual(operation.isReady, false)
@@ -100,12 +126,18 @@ final class AsynchronousOperationTests: XCTestCase {
         XCTAssertEqual(operation.isCancelled, false)
         XCTAssertEqual(operation.isFinished, false)
 
-        let expectations = [
-            XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
-            XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: true),
-            XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
-        ]
+        let expectations: [XCTestExpectation] = {
+            if #available(OSXApplicationExtension 10.0, iOSApplicationExtension 2.0, watchOSApplicationExtension 2.0, tvOSApplicationExtension 9.0, *) {
+                return [
+                           XCTKVOExpectation(keyPath: "isReady", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isExecuting", object: operation, expectedValue: false),
+                           XCTKVOExpectation(keyPath: "isCancelled", object: operation, expectedValue: true),
+                           XCTKVOExpectation(keyPath: "isFinished", object: operation, expectedValue: false)
+                       ]
+            } else {
+                return []
+            }
+        }()
 
         operation.state = .cancelled
         XCTAssertEqual(operation.isReady, false)
