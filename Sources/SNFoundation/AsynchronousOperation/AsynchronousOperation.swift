@@ -13,97 +13,71 @@ open class AsynchronousOperation<Success, Failure: Error>: Foundation.Operation 
     }
 
     open var state: State? {
-        willSet {
+        didSet {
             switch state {
             case .cancelled:
-                willChangeValue(for: \.isCancelled)
-                willChangeValue(for: \.isExecuting)
+                _isCancelled = true
+                _isFinished = _isExecuting
+                _isExecuting = false
             case .executing:
-                willChangeValue(for: \.isExecuting)
+                _isExecuting = true
             case .ready:
-                willChangeValue(for: \.isReady)
+                _isReady = true
             case .finished:
-                willChangeValue(for: \.isFinished)
+                _isExecuting = false
+                _isFinished = true
             case nil:
-                break
+                _isReady = false
             }
+        }
+    }
 
-            switch newValue {
-            case .cancelled:
-                willChangeValue(for: \.isCancelled)
-                willChangeValue(for: \.isExecuting)
-            case .executing:
-                willChangeValue(for: \.isExecuting)
-            case .ready:
-                willChangeValue(for: \.isReady)
-            case .finished:
-                willChangeValue(for: \.isFinished)
-            case nil:
-                break
-            }
+    private var _isCancelled: Bool = false {
+        willSet {
+            willChangeValue(for: \.isCancelled)
         }
         didSet {
-            switch oldValue {
-            case .cancelled:
-                didChangeValue(for: \.isCancelled)
-                didChangeValue(for: \.isExecuting)
-            case .executing:
-                didChangeValue(for: \.isExecuting)
-            case .ready:
-                didChangeValue(for: \.isReady)
-            case .finished:
-                didChangeValue(for: \.isFinished)
-            case nil:
-                break
-            }
-
-            switch state {
-            case .cancelled:
-                didChangeValue(for: \.isCancelled)
-                didChangeValue(for: \.isExecuting)
-            case .executing:
-                didChangeValue(for: \.isExecuting)
-            case .ready:
-                didChangeValue(for: \.isReady)
-            case .finished:
-                didChangeValue(for: \.isFinished)
-            case nil:
-                break
-            }
+            didChangeValue(for: \.isCancelled)
         }
     }
-
     open override var isCancelled: Bool {
-        if case .cancelled = state {
-            return true
-        } else {
-            return false
-        }
+        return _isCancelled
     }
 
+    private var _isExecuting: Bool = false {
+        willSet {
+            willChangeValue(for: \.isExecuting)
+        }
+        didSet {
+            didChangeValue(for: \.isExecuting)
+        }
+    }
     open override var isExecuting: Bool {
-        if case .executing = state {
-            return true
-        } else {
-            return false
-        }
+        return _isExecuting
     }
 
+    private var _isReady: Bool = false {
+        willSet {
+            willChangeValue(for: \.isReady)
+        }
+        didSet {
+            didChangeValue(for: \.isReady)
+        }
+    }
     open override var isReady: Bool {
-        if case .ready = state {
-            return true
-        } else {
-            return false
-        }
+        return _isReady
     }
 
-    open override var isFinished: Bool {
-        switch state {
-        case .finished:
-            return true
-        default:
-            return false
+    private var _isFinished: Bool = false {
+        willSet {
+            willChangeValue(for: \.isFinished)
         }
+        didSet {
+            didChangeValue(for: \.isFinished)
+        }
+    }
+    open override var isFinished: Bool {
+        return _isFinished
     }
 }
 
